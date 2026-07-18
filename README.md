@@ -2,7 +2,7 @@
 
 An autonomous, solar-powered edge computing cluster built entirely from decommissioned Android smartphones. Phones run on-device computer vision against their real physical surroundings and stream detected positions/motion to a client UI over a raw-binary WebSocket — no cloud infrastructure involved.
 
-Full rationale, architecture tiers, and technology decisions live in [ARCHITECTURE.md](ARCHITECTURE.md).
+Full rationale, architecture tiers, and technology decisions live in [docs/ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## How it works
 
