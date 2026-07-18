@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Edge Node Client</title>
+    <style>
+      body {
+        font-family: monospace;
+        background: #121212;
+        color: #00ff00;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Live Telemetry Stream</h2>
+    <div id="output">Waiting for connection...</div>
+
+    <script>
+      // 1. Connect to the WasmEdge server
+      const ws = new WebSocket("ws://192.168.11.3:8080/stream");
+
+      // 2. CRITICAL: Tell the WebSocket we want raw memory, not strings
+      ws.binaryType = "arraybuffer";
+
+      const output = document.getElementById("output");
+
+      ws.onmessage = (event) => {
+        const buffer = event.data;
+
+        // 3. Wrap our typecasting lens around the raw bytes
+        const view = new DataView(buffer);
+
+        // 4. Read the exact memory offsets based on our 20-byte Rust struct
+        // The 'true' flag tells JS to use Little-Endian byte order, which Rust defaults to
+        const id = view.getUint32(0, true);
+        const x = view.getFloat32(4, true);
+        const y = view.getFloat32(8, true);
+        const vx = view.getFloat32(12, true);
+        const vy = view.getFloat32(16, true);
+
+        output.innerText = `Agent [${id}] \nX:  ${x.toFixed(2)} \nY:  ${y.toFixed(2)}\nVx: ${vx.toFixed(2)}\nVy: ${vy.toFixed(2)}`;
+      };
+
+      ws.onopen = () => (output.innerText = "Connected to Edge Node...");
+      ws.onclose = () => (output.innerText = "Connection lost.");
+    </script>
+  </body>
+</html>
