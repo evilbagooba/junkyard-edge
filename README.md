@@ -43,4 +43,4 @@ On an Android donor device, install [Termux](https://f-droid.org/packages/com.te
 
 ## Motivation
 
-This project explores compute-per-watt engineering for constrained, battery/solar-powered devices — see ARCHITECTURE.md §2 for the full context.
+This project explores compute-per-watt engineering for constrained, battery/solar-powered devices — see [ARCHITECTURE.md]ARCHITECTURE.md §2 for the full context.
