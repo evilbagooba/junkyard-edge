@@ -1,0 +1,14 @@
+[package]
+name = "simulation-engine"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bytemuck = { version = "1.25.1", features = ["derive"] }
+futures-util = "0.3.32"
+tokio_wasi = { version = "1.25.2", features = ["full"] }
+warp_wasi = "0.3.3"
+
+[[bin]]
+name = "simulation-engine"
+path = "main.rs"
