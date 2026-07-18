@@ -2,13 +2,13 @@
 
 An autonomous, solar-powered edge computing cluster built entirely from decommissioned Android smartphones. Phones run on-device computer vision against their real physical surroundings and stream detected positions/motion to a client UI over a raw-binary WebSocket — no cloud infrastructure involved.
 
-Full rationale, architecture tiers, and technology decisions live in [docs/ARCHITECTURE.md](ARCHITECTURE.md).
+Full rationale, architecture tiers, and technology decisions live in [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## How it works
 
 A Rust core compiles to WebAssembly (`wasm32-wasip1`) and runs under the [WasmEdge](https://wasmedge.org/) runtime on each donor phone via Termux. It streams state over a WebSocket as raw binary (via `bytemuck`/`#[repr(C)]` struct casting) rather than JSON, so a JS/WebGL client can read coordinates straight out of an `ArrayBuffer` with `DataView` at high frame rates without garbage-collector overhead.
 
-Currently, the core generates its coordinates from a synthetic flocking/herding physics simulation rather than real camera input — see Status below for why, and [ARCHITECTURE.md](ARCHITECTURE.md) §1 for how that's expected to change.
+Currently, the core generates its coordinates from a synthetic flocking/herding physics simulation rather than real camera input — see Status below for why, and [ARCHITECTURE.md](docs/ARCHITECTURE.md) §1 for how that's expected to change.
 
 ```
 simulation-engine/   Rust -> Wasm simulation core (WasmEdge / WASI)
@@ -25,9 +25,9 @@ See ARCHITECTURE.md §3 for details on each tier and §4 for the full stack deci
 
 ## Status
 
-- Rust → Wasm build pipeline working locally (`wasm32-wasip1` target, `wasmedge` runner configured via `.cargo/config.toml`). See [Session1.md](Session1.md) for the dev environment setup (Neovim/rust-analyzer) and the Tokio single-threaded/WASI constraints that had to be worked around.
+- Rust → Wasm build pipeline working locally (`wasm32-wasip1` target, `wasmedge` runner configured via `.cargo/config.toml`). See [Session1.md](docs/Session1.md) for the dev environment setup (Neovim/rust-analyzer) and the Tokio single-threaded/WASI constraints that had to be worked around.
 - First successful on-device execution: WasmEdge running natively under Termux on a Samsung Galaxy A32 5G, no root required.
-- Known constraint: the Android build of WasmEdge doesn't currently accept **inbound** WebSocket connections (socket-handling gap in that runtime build). The architecture already treats phones as telemetry *producers* rather than listeners, so this pushes the design toward that model earlier than planned — a laptop or Raspberry Pi (the Tier 2 gateway) does the listening/serving instead. Next validation step: confirm outbound connections succeed from the same binary. Full debugging log in [Session2.md](Session2.md).
+- Known constraint: the Android build of WasmEdge doesn't currently accept **inbound** WebSocket connections (socket-handling gap in that runtime build). The architecture already treats phones as telemetry *producers* rather than listeners, so this pushes the design toward that model earlier than planned — a laptop or Raspberry Pi (the Tier 2 gateway) does the listening/serving instead. Next validation step: confirm outbound connections succeed from the same binary. Full debugging log in [Session2.md](docs/Session2.md).
 - The synthetic flocking/herding simulation currently in `simulation-engine/` is a stand-in used to validate the Rust/Wasm/WasmEdge/WebSocket pipeline first. Real on-device computer vision (replacing the simulation as the source of streamed coordinates) is the target, not yet built — see ARCHITECTURE.md §1 and its open camera-privacy questions in §5 before that lands.
 
 ## Development
@@ -43,4 +43,4 @@ On an Android donor device, install [Termux](https://f-droid.org/packages/com.te
 
 ## Motivation
 
-This project explores compute-per-watt engineering for constrained, battery/solar-powered devices — see [ARCHITECTURE.md](ARCHITECTURE.md) §2 for the full context.
+This project explores compute-per-watt engineering for constrained, battery/solar-powered devices — see [ARCHITECTURE.md](docs/ARCHITECTURE.md) §2 for the full context.
