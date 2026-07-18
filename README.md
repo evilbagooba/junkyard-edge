@@ -8,7 +8,7 @@ Full rationale, architecture tiers, and technology decisions live in [ARCHITECTU
 
 A Rust core compiles to WebAssembly (`wasm32-wasip1`) and runs under the [WasmEdge](https://wasmedge.org/) runtime on each donor phone via Termux. It streams state over a WebSocket as raw binary (via `bytemuck`/`#[repr(C)]` struct casting) rather than JSON, so a JS/WebGL client can read coordinates straight out of an `ArrayBuffer` with `DataView` at high frame rates without garbage-collector overhead.
 
-Currently, the core generates its coordinates from a synthetic flocking/herding physics simulation rather than real camera input — see Status below for why, and ARCHITECTURE.md §1 for how that's expected to change.
+Currently, the core generates its coordinates from a synthetic flocking/herding physics simulation rather than real camera input — see Status below for why, and [ARCHITECTURE.md](ARCHITECTURE.md) §1 for how that's expected to change.
 
 ```
 simulation-engine/   Rust -> Wasm simulation core (WasmEdge / WASI)
@@ -43,4 +43,4 @@ On an Android donor device, install [Termux](https://f-droid.org/packages/com.te
 
 ## Motivation
 
-This project explores compute-per-watt engineering for constrained, battery/solar-powered devices — see [ARCHITECTURE.md]ARCHITECTURE.md §2 for the full context.
+This project explores compute-per-watt engineering for constrained, battery/solar-powered devices — see [ARCHITECTURE.md](ARCHITECTURE.md) §2 for the full context.
